@@ -23,15 +23,18 @@ class DatiRiepilogo implements XmlSerializableInterface
     protected $imposta;
     /** @var string */
     protected $esigibilitaIVA = "I";
-
-    /**
-     * DatiRiepilogo constructor.
-     * @param $imponibileImporto
-     * @param $aliquotaIVA
-     * @param string $esigibilitaIVA
-     * @param bool $imposta
-     */
-    public function __construct($imponibileImporto, $aliquotaIVA, $esigibilitaIVA = "I", $imposta = false)
+    /** @var string */
+    protected $natura;
+	
+	/**
+	 * DatiRiepilogo constructor.
+	 * @param $imponibileImporto
+	 * @param $aliquotaIVA
+	 * @param string $esigibilitaIVA
+	 * @param bool $imposta
+	 * @param string $natura
+	 */
+    public function __construct($imponibileImporto, $aliquotaIVA, $esigibilitaIVA = null, $imposta = false, $natura = null)
     {
         if ($imposta === false) {
             $this->imposta = ($imponibileImporto / 100) * $aliquotaIVA;
@@ -41,6 +44,7 @@ class DatiRiepilogo implements XmlSerializableInterface
         $this->imponibileImporto = $imponibileImporto;
         $this->aliquotaIVA = $aliquotaIVA;
         $this->esigibilitaIVA = $esigibilitaIVA;
+        $this->natura = $natura;
     }
 
     /**
@@ -53,7 +57,12 @@ class DatiRiepilogo implements XmlSerializableInterface
             $writer->writeElement('AliquotaIVA', number_format($this->aliquotaIVA, 2));
             $writer->writeElement('ImponibileImporto', number_format($this->imponibileImporto, 2));
             $writer->writeElement('Imposta', number_format($this->imposta, 2));
-            $writer->writeElement('EsigibilitaIVA', $this->esigibilitaIVA);
+            if (isset($this->esigibilitaIVA)) {
+                $writer->writeElement('EsigibilitaIVA', $this->esigibilitaIVA);
+            }
+            if (isset($this->natura)) {
+                $writer->writeElement("Natura", $this->natura);
+            }
         $writer->endElement();
 
         return $writer;
