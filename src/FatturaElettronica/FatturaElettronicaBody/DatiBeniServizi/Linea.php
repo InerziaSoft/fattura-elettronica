@@ -29,24 +29,28 @@ class Linea implements XmlSerializableInterface
     protected $prezzoUnitario;
     /** @var float */
     protected $aliquotaIva;
-
-
-    /**
-     * Linea constructor.
-     * @param $descrizione
-     * @param $prezzoUnitario
-     * @param null $codiceArticolo
-     * @param float $quantita
-     * @param string $unitaMisura
-     * @param float $aliquotaIva
-     */
+    /** @var string */
+    protected $natura;
+	
+	
+	/**
+	 * Linea constructor.
+	 * @param $descrizione
+	 * @param $prezzoUnitario
+	 * @param null $codiceArticolo
+	 * @param float $quantita
+	 * @param string $unitaMisura
+	 * @param float $aliquotaIva
+	 * @param string $natura
+	 */
     public function __construct(
         $descrizione,
         $prezzoUnitario,
         $codiceArticolo = null,
         $quantita = 1.00,
         $unitaMisura = 'pz',
-        $aliquotaIva = 22.00
+        $aliquotaIva = 22.00,
+		$natura = null
     ) {
         $this->codiceArticolo = $codiceArticolo;
         $this->descrizione = $descrizione;
@@ -54,6 +58,7 @@ class Linea implements XmlSerializableInterface
         $this->quantita = $quantita;
         $this->unitaMisura = $unitaMisura;
         $this->aliquotaIva = $aliquotaIva;
+        $this->natura = $natura;
     }
 
 
@@ -78,6 +83,7 @@ class Linea implements XmlSerializableInterface
         $writer->writeElement('PrezzoUnitario', number_format($this->prezzoUnitario, 2));
         $writer->writeElement('PrezzoTotale', $this->prezzoTotale());
         $writer->writeElement('AliquotaIVA', number_format($this->aliquotaIva, 2));
+        $writer->writeElement("Natura", $this->natura);
         $writer->endElement();
 
         return $writer;
