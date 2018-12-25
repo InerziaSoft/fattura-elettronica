@@ -54,9 +54,9 @@ class DatiRiepilogo implements XmlSerializableInterface
     public function toXmlBlock(\XMLWriter $writer)
     {
         $writer->startElement('DatiRiepilogo');
-            $writer->writeElement('AliquotaIVA', number_format($this->aliquotaIVA, 2));
-            $writer->writeElement('ImponibileImporto', number_format($this->imponibileImporto, 2));
-            $writer->writeElement('Imposta', number_format($this->imposta, 2));
+            $writer->writeElement('AliquotaIVA', number_format($this->aliquotaIVA, 2, ".", ""));
+            $writer->writeElement('ImponibileImporto', number_format($this->imponibileImporto, 2, ".", ""));
+            $writer->writeElement('Imposta', number_format($this->imposta, 2, ".", ""));
             if (isset($this->esigibilitaIVA)) {
                 $writer->writeElement('EsigibilitaIVA', $this->esigibilitaIVA);
             }

@@ -50,7 +50,7 @@ class DatiBollo implements XmlSerializableInterface {
 	public function toXmlBlock(\XMLWriter $writer) {
 		$writer->startElement("DatiBollo");
 			$writer->writeElement("BolloVirtuale", $this->bolloVirtuale);
-			$writer->writeElement("ImportoBollo", number_format($this->importoBollo, 2));
+			$writer->writeElement("ImportoBollo", number_format($this->importoBollo, 2, ".", ""));
 		$writer->endElement();
 		return $writer;
 	}

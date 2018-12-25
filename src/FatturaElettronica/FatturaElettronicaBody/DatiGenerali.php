@@ -68,7 +68,7 @@ class DatiGenerali implements XmlSerializableInterface
                 $this->datiBollo->toXmlBlock($writer);
                 $writer->writeElement(
                     'ImportoTotaleDocumento',
-                    number_format($this->importoTotaleDocumento, 2)
+                    number_format($this->importoTotaleDocumento, 2, ".", "")
                 );
             $writer->endElement();
         $writer->endElement();
