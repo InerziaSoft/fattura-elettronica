@@ -57,9 +57,10 @@ class FatturaElettronicaFactory
         DatiAnagrafici $datiAnagraficiCedente,
         Sede $sedeCedente,
         $telefonoCedente,
-        $emailCedente
+        $emailCedente,
+		$riferimentoAmministrazione
     ) {
-        $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente);
+        $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente, $riferimentoAmministrazione);
         $this->setInformazioniContatto($telefonoCedente, $emailCedente);
         $this->xmlFactory = new XmlFactory();
     }
@@ -69,9 +70,9 @@ class FatturaElettronicaFactory
      * @param Sede $sede
      * @param bool $idTrasmittente
      */
-    public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $idTrasmittente = true)
+    public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $riferimentoAmministrazione = null, $idTrasmittente = true)
     {
-        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede);
+        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $riferimentoAmministrazione);
         if ($idTrasmittente) {
             $this->idTrasmittente = new IdTrasmittente($datiAnagrafici->idPaese, $datiAnagrafici->idCodice);
         }

@@ -21,6 +21,8 @@ class CedentePrestatore implements XmlSerializableInterface
     protected $datiAnagrafici;
     /** @var Sede */
     protected $sede;
+	/** @var string|null */
+    protected $riferimentoAmministrazione;
 
     /**
      * CedentePrestatore constructor.
@@ -29,10 +31,12 @@ class CedentePrestatore implements XmlSerializableInterface
      */
     public function __construct(
         DatiAnagrafici $datiAnagrafici,
-        Sede $sede
+        Sede $sede,
+        $riferimentoAmministrazione
     ) {
         $this->datiAnagrafici = $datiAnagrafici;
         $this->sede = $sede;
+        $this->riferimentoAmministrazione = $riferimentoAmministrazione;
     }
 
     /**
@@ -44,6 +48,7 @@ class CedentePrestatore implements XmlSerializableInterface
         $writer->startElement('CedentePrestatore');
             $this->datiAnagrafici->toXmlBlock($writer);
             $this->sede->toXmlBlock($writer);
+            if (isset($this->riferimentoAmministrazione)) $writer->writeAttribute("RiferimentoAmministrazione", $this->riferimentoAmministrazione);
         $writer->endElement();
         return $writer;
     }
