@@ -25,7 +25,7 @@ use Deved\FatturaElettronica\FatturaElettronicaFactory;
 use Deved\FatturaElettronica\XmlValidator;
 use PHPUnit\Framework\TestCase;
 
-class FatturaSempliceTest extends TestCase
+class FatturaIntermediarioTest extends TestCase
 {
     /**
      * @return DatiAnagrafici
@@ -66,7 +66,8 @@ class FatturaSempliceTest extends TestCase
             $datiAnagrafici,
             $sede,
             '+39123456789',
-            'info@deved.it'
+            'info@deved.it',
+            new DatiAnagrafici('XYZYZX77M04H888K', 'Dati Cessionario')
         );
         $this->assertInstanceOf(FatturaElettronicaFactory::class, $feFactory);
         return $feFactory;
@@ -147,7 +148,7 @@ class FatturaSempliceTest extends TestCase
     {
         $linee = [];
         $linee[] = new Linea('Articolo1', 50, 'ABC');
-        $linee[]= new Linea('Articolo2', 25, 'CDE', 2);
+        $linee[]= new Linea('Articolo2', 50, 'CDE');
         $this->assertCount(2, $linee);
         return $linee;
     }
@@ -196,7 +197,6 @@ class FatturaSempliceTest extends TestCase
         $name = $fattura->getFileName();
         $this->assertTrue(strlen($name) > 5);
     }
-
 
     /**
      * @depends testCreateFattura

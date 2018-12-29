@@ -44,6 +44,10 @@ class FatturaElettronicaFactory
     protected $progressivoInvio = 0;
     /** @var XmlFactory */
     protected $xmlFactory;
+    /** @var string */
+    protected $soggettoEmittente;
+    /** @var DatiAnagrafici */
+    protected $terzoIntermediario;
 
 
     /**
@@ -52,16 +56,23 @@ class FatturaElettronicaFactory
      * @param Sede $sedeCedente
      * @param string $telefonoCedente
      * @param string $emailCedente
+     * @param DatiAnagrafici|null $terzoIntermediario
+     * @param string $soggettoEmittente
      */
     public function __construct(
         DatiAnagrafici $datiAnagraficiCedente,
         Sede $sedeCedente,
         $telefonoCedente,
         $emailCedente,
-		$riferimentoAmministrazione
+		$riferimentoAmministrazione,
+        DatiAnagrafici $terzoIntermediario = null,
+        $soggettoEmittente = 'TZ'
     ) {
         $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente, $riferimentoAmministrazione);
         $this->setInformazioniContatto($telefonoCedente, $emailCedente);
+        if ($terzoIntermediario) {
+            $this->setIntermediario($terzoIntermediario, $soggettoEmittente);
+        }
         $this->xmlFactory = new XmlFactory();
     }
 
@@ -74,8 +85,14 @@ class FatturaElettronicaFactory
     {
         $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $riferimentoAmministrazione);
         if ($idTrasmittente) {
-            $this->idTrasmittente = new IdTrasmittente($datiAnagrafici->idPaese, $datiAnagrafici->idCodice);
+            $this->idTrasmittente = new IdTrasmittente($datiAnagrafici->idPaese, $datiAnagrafici->codiceFiscale);
         }
+    }
+
+    public function setIntermediario(DatiAnagrafici $terzoIntermediario, $soggettoEmittente = 'TZ')
+    {
+        $this->terzoIntermediario = $terzoIntermediario;
+        $this->soggettoEmittente = $soggettoEmittente;
     }
 
     /**
@@ -141,7 +158,9 @@ class FatturaElettronicaFactory
         $fatturaElettronicaHeader = new FatturaElettronicaHeader(
             $datiTrasmissione,
             $this->cedentePrestatore,
-            $this->cessionarioCommittente
+            $this->cessionarioCommittente,
+            $this->terzoIntermediario,
+            $this->soggettoEmittente
         );
         $datiBeniServizi = new FatturaElettronicaBody\DatiBeniServizi($linee, $datiRiepilogo);
         $fatturaElettronicaBody = new FatturaElettronicaBody(

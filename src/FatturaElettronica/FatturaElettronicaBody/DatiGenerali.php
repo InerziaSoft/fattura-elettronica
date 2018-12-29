@@ -11,10 +11,12 @@
 
 namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody;
 
+use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
 
 class DatiGenerali implements XmlSerializableInterface
 {
+    use MagicFieldsTrait;
     /** @var string */
     protected $tipoDocumento;
     /** @var string */
@@ -68,8 +70,9 @@ class DatiGenerali implements XmlSerializableInterface
                 $this->datiBollo->toXmlBlock($writer);
                 $writer->writeElement(
                     'ImportoTotaleDocumento',
-                    number_format($this->importoTotaleDocumento, 2, ".", "")
+                    fe_number_format($this->importoTotaleDocumento, 2)
                 );
+                $this->writeXmlFields($writer);
             $writer->endElement();
         $writer->endElement();
         //todo: implementare DatiOrdineAcquisto, DatiContratto etc. (facoltativi)

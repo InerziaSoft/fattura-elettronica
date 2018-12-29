@@ -11,10 +11,12 @@
 
 namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\DatiBeniServizi;
 
+use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
 
 class Linea implements XmlSerializableInterface
 {
+    use MagicFieldsTrait;
     /** @var integer */
     protected $numeroLinea;
     /** @var string */
@@ -47,7 +49,7 @@ class Linea implements XmlSerializableInterface
         $descrizione,
         $prezzoUnitario,
         $codiceArticolo = null,
-        $quantita = 1.00,
+        $quantita = null,
         $unitaMisura = null,
         $aliquotaIva = 22.00,
 		$natura = null
@@ -78,14 +80,17 @@ class Linea implements XmlSerializableInterface
             $writer->endElement();
         }
         $writer->writeElement('Descrizione', $this->descrizione);
-        $writer->writeElement('Quantita', number_format($this->quantita, 2, ".", ""));
-        if (isset($this->unitaMisura)) $writer->writeElement('UnitaMisura', $this->unitaMisura);
-        $writer->writeElement('PrezzoUnitario', number_format($this->prezzoUnitario, 2, ".", ""));
-        $writer->writeElement('PrezzoTotale', $this->prezzoTotale());
-        $writer->writeElement('AliquotaIVA', number_format($this->aliquotaIva, 2, ".", ""));
-        $writer->writeElement("Natura", $this->natura);
-        $writer->endElement();
+		if ($this->quantita) {
+			$writer->writeElement('Quantita', fe_number_format($this->quantita, 2));
+			$writer->writeElement('UnitaMisura', $this->unitaMisura);
+		}
+		$writer->writeElement('PrezzoUnitario', fe_number_format($this->prezzoUnitario, 2));
+		$writer->writeElement('PrezzoTotale', $this->prezzoTotale());
+		$writer->writeElement('AliquotaIVA', fe_number_format($this->aliquotaIva, 2));
+		$writer->writeElement("Natura", $this->natura);
+		$this->writeXmlFields($writer);
 
+        $writer->endElement();
         return $writer;
     }
 
@@ -97,10 +102,12 @@ class Linea implements XmlSerializableInterface
      */
     public function prezzoTotale($format = true)
     {
+        $quantita = $this->quantita ? $this->quantita : 1;
         if ($format) {
-            return number_format($this->prezzoUnitario * $this->quantita, 2, ".", "");
-        }
-        return $this->prezzoUnitario * $this->quantita;
+			return fe_number_format($this->prezzoUnitario * $quantita, 2);
+		}
+
+        return $this->prezzoUnitario * $quantita;
     }
 
     /**

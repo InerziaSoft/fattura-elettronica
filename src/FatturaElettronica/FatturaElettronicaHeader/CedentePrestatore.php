@@ -13,10 +13,12 @@ namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader;
 
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader\Common\DatiAnagrafici;
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader\Common\Sede;
+use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
 
 class CedentePrestatore implements XmlSerializableInterface
 {
+    use MagicFieldsTrait;
     /** @var DatiAnagrafici */
     protected $datiAnagrafici;
     /** @var Sede */
@@ -46,9 +48,12 @@ class CedentePrestatore implements XmlSerializableInterface
     public function toXmlBlock(\XMLWriter $writer)
     {
         $writer->startElement('CedentePrestatore');
-            $this->datiAnagrafici->toXmlBlock($writer);
-            $this->sede->toXmlBlock($writer);
-            if (isset($this->riferimentoAmministrazione)) $writer->writeElement("RiferimentoAmministrazione", $this->riferimentoAmministrazione);
+        $this->datiAnagrafici->toXmlBlock($writer);
+        $this->sede->toXmlBlock($writer);
+
+        if (isset($this->riferimentoAmministrazione)) $writer->writeElement("RiferimentoAmministrazione", $this->riferimentoAmministrazione);
+
+        $this->writeXmlFields($writer);
         $writer->endElement();
         return $writer;
     }

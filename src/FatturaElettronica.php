@@ -10,6 +10,7 @@
  */
 
 namespace Deved\FatturaElettronica;
+include_once 'helpers.php';
 
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody;
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader;
@@ -22,6 +23,8 @@ class FatturaElettronica implements XmlSerializableInterface
     protected $fatturaElettronicaBody;
     /** @var XmlFactory */
     protected $xmlFactory;
+    /** @var XmlValidator */
+    protected $xmlValidator;
 
     public function __construct(
         FatturaElettronicaHeader $fatturaElettronicaHeader,
@@ -64,6 +67,7 @@ class FatturaElettronica implements XmlSerializableInterface
     }
 
     /**
+     * Restituisce l'xml della fattura elettronica
      * @return string
      * @throws \Exception
      */
@@ -73,5 +77,24 @@ class FatturaElettronica implements XmlSerializableInterface
             return $this->xmlFactory->toXml($this);
         }
         throw new \Exception('xmlFactory non presente, utilizzare FatturaElettronicaFactory per generare le fatture');
+    }
+
+
+    /**
+     * Verifica l'xml della fattura
+     * @return bool
+     * @throws \Exception
+     */
+    public function verifica()
+    {
+        $this->xmlValidator = new XmlValidator();
+        $isValid = $this->xmlValidator->validate(
+            $this->toXml(),
+            dirname(__FILE__) . '/../xsd/fattura_pa_1.2.1.xsd'
+        );
+        if (!$isValid) {
+            throw new \Exception(json_encode($this->xmlValidator->errors));
+        }
+        return $isValid;
     }
 }
