@@ -60,15 +60,15 @@ class FatturaElettronicaFactory
      * @param string $soggettoEmittente
      */
     public function __construct(
-        DatiAnagrafici $datiAnagraficiCedente,
-        Sede $sedeCedente,
-        $telefonoCedente,
-        $emailCedente,
-		$riferimentoAmministrazione,
-        DatiAnagrafici $terzoIntermediario = null,
-        $soggettoEmittente = 'TZ'
+		DatiAnagrafici $datiAnagraficiCedente,
+		Sede $sedeCedente,
+		$telefonoCedente,
+		$emailCedente,
+		$riferAmminisr126,
+		DatiAnagrafici $terzoIntermediario = null,
+		$soggettoEmittente = 'TZ'
     ) {
-        $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente, $riferimentoAmministrazione);
+        $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente, $riferAmminisr126);
         $this->setInformazioniContatto($telefonoCedente, $emailCedente);
         if ($terzoIntermediario) {
             $this->setIntermediario($terzoIntermediario, $soggettoEmittente);
@@ -81,9 +81,9 @@ class FatturaElettronicaFactory
      * @param Sede $sede
      * @param bool $idTrasmittente
      */
-    public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $riferimentoAmministrazione = null, $idTrasmittente = true)
+    public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $rifAmminisr126 = null, $idTrasmittente = true)
     {
-        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $riferimentoAmministrazione);
+        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $rifAmminisr126);
         if ($idTrasmittente) {
             $this->idTrasmittente = new IdTrasmittente($datiAnagrafici->idPaese, $datiAnagrafici->codiceFiscale);
         }
