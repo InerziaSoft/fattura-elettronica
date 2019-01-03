@@ -6,3 +6,4 @@
 /phpstan.neon
 /.project
 /.composer.lock
+/.idea

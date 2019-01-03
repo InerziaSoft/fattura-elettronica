@@ -56,6 +56,7 @@ class FatturaElettronicaFactory
      * @param Sede $sedeCedente
      * @param string $telefonoCedente
      * @param string $emailCedente
+	 * @param string $riferAmministr126
      * @param DatiAnagrafici|null $terzoIntermediario
      * @param string $soggettoEmittente
      */
@@ -64,11 +65,11 @@ class FatturaElettronicaFactory
 		Sede $sedeCedente,
 		$telefonoCedente,
 		$emailCedente,
-		$riferAmminisr126,
+		$riferAmministr126,
 		DatiAnagrafici $terzoIntermediario = null,
 		$soggettoEmittente = 'TZ'
     ) {
-        $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente, $riferAmminisr126);
+        $this->setCedentePrestatore($datiAnagraficiCedente, $sedeCedente, $riferAmministr126);
         $this->setInformazioniContatto($telefonoCedente, $emailCedente);
         if ($terzoIntermediario) {
             $this->setIntermediario($terzoIntermediario, $soggettoEmittente);
@@ -76,14 +77,15 @@ class FatturaElettronicaFactory
         $this->xmlFactory = new XmlFactory();
     }
 
-    /**
-     * @param DatiAnagrafici $datiAnagrafici
-     * @param Sede $sede
-     * @param bool $idTrasmittente
-     */
-    public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $rifAmminisr126 = null, $idTrasmittente = true)
+	/**
+	 * @param DatiAnagrafici $datiAnagrafici
+	 * @param Sede $sede
+	 * @param null|string $rifAmministr126
+	 * @param bool $idTrasmittente
+	 */
+    public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $rifAmministr126 = null, $idTrasmittente = true)
     {
-        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $rifAmminisr126);
+        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $rifAmministr126);
         if ($idTrasmittente) {
             $this->idTrasmittente = new IdTrasmittente($datiAnagrafici->idPaese, $datiAnagrafici->codiceFiscale);
         }
