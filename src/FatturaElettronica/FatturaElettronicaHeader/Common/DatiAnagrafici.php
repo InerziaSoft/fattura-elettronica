@@ -55,7 +55,9 @@ class DatiAnagrafici implements XmlSerializableInterface
                 $writer->writeElement('IdCodice', $this->idCodice);
             $writer->endElement();
         }
-            $writer->writeElement('CodiceFiscale', $this->codiceFiscale);
+        	if ($this->codiceFiscale) {
+				$writer->writeElement('CodiceFiscale', $this->codiceFiscale);
+			}
             $writer->startElement('Anagrafica');
                 $writer->writeElement('Denominazione', $this->denominazione);
             $writer->endElement();
