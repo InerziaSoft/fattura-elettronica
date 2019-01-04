@@ -14,8 +14,9 @@ include_once 'helpers.php';
 
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody;
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader;
+use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea;
 
-class FatturaElettronica implements XmlSerializableInterface
+class FatturaElettronica implements XmlSerializableInterface, FatturaElettronicaInterface
 {
     /** @var FatturaElettronicaHeader */
     protected $fatturaElettronicaHeader;
@@ -96,5 +97,14 @@ class FatturaElettronica implements XmlSerializableInterface
             throw new \Exception(json_encode($this->xmlValidator->errors));
         }
         return $isValid;
+    }
+
+    /**
+     * @param IscrizioneRea $iscrizioneRea
+     * @return mixed
+     */
+    public function setIscrizioneRea(IscrizioneRea $iscrizioneRea)
+    {
+        $this->fatturaElettronicaHeader->cedentePrestatore->setIscrizioneRea($iscrizioneRea);
     }
 }

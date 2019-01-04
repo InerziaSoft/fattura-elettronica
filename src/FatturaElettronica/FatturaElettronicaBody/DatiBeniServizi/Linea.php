@@ -33,8 +33,8 @@ class Linea implements XmlSerializableInterface
     protected $aliquotaIva;
     /** @var string */
     protected $natura;
-	
-	
+
+
 	/**
 	 * Linea constructor.
 	 * @param $descrizione
@@ -50,7 +50,7 @@ class Linea implements XmlSerializableInterface
         $prezzoUnitario,
         $codiceArticolo = null,
         $quantita = null,
-        $unitaMisura = null,
+        $unitaMisura = 'pz',
         $aliquotaIva = 22.00,
 		$natura = null
     ) {
@@ -80,16 +80,17 @@ class Linea implements XmlSerializableInterface
             $writer->endElement();
         }
         $writer->writeElement('Descrizione', $this->descrizione);
-		if ($this->quantita) {
-			$writer->writeElement('Quantita', fe_number_format($this->quantita, 2));
-			$writer->writeElement('UnitaMisura', $this->unitaMisura);
-		}
-		$writer->writeElement('PrezzoUnitario', fe_number_format($this->prezzoUnitario, 2));
-		$writer->writeElement('PrezzoTotale', $this->prezzoTotale());
-		$writer->writeElement('AliquotaIVA', fe_number_format($this->aliquotaIva, 2));
-		$writer->writeElement("Natura", $this->natura);
-		$this->writeXmlFields($writer);
-
+        if ($this->quantita) {
+            $writer->writeElement('Quantita', fe_number_format($this->quantita, 2));
+            $writer->writeElement('UnitaMisura', $this->unitaMisura);
+        }
+        $this->writeXmlField('DataInizioPeriodo', $writer);
+        $this->writeXmlField('DataFinePeriodo', $writer);
+        $writer->writeElement('PrezzoUnitario', fe_number_format($this->prezzoUnitario, 2));
+        $writer->writeElement('PrezzoTotale', $this->prezzoTotale());
+        $writer->writeElement('AliquotaIVA', fe_number_format($this->aliquotaIva, 2));
+        $writer->writeElement('Natura', $this->natura);
+        $this->writeXmlFields($writer);
         $writer->endElement();
         return $writer;
     }
@@ -104,9 +105,8 @@ class Linea implements XmlSerializableInterface
     {
         $quantita = $this->quantita ? $this->quantita : 1;
         if ($format) {
-			return fe_number_format($this->prezzoUnitario * $quantita, 2);
-		}
-
+            return fe_number_format($this->prezzoUnitario * $quantita, 2);
+        }
         return $this->prezzoUnitario * $quantita;
     }
 

@@ -20,10 +20,11 @@ use phpDocumentor\Reflection\Types\Nullable;
 
 class FatturaElettronicaHeader implements XmlSerializableInterface
 {
+    const FE_CODE = 1.0;
     /** @var DatiTrasmissione */
     public $datiTrasmissione;
     /** @var CedentePrestatore */
-    protected $cedentePrestatore;
+    public $cedentePrestatore;
     /** @var CessionarioCommittente */
     protected $cessionarioCommittente;
     /** @var DatiAnagrafici|null */

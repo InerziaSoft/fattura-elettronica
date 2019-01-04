@@ -11,6 +11,7 @@
 
 namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody;
 
+use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\DatiGenerali\DatiDdt;
 use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
 
@@ -29,7 +30,9 @@ class DatiGenerali implements XmlSerializableInterface
     protected $divisa;
     /** @var DatiBollo */
     protected $datiBollo;
-	
+	/** @var DatiDdt */
+	protected $datiDdt;
+
 	/**
 	 * DatiGenerali constructor.
 	 * @param string $tipoDocumento
@@ -55,6 +58,11 @@ class DatiGenerali implements XmlSerializableInterface
         $this->datiBollo = $datiBollo;
     }
 
+    public function setDatiDdt(DatiDdt $datiDdt)
+    {
+        $this->datiDdt = $datiDdt;
+    }
+
     /**
      * @param \XMLWriter $writer
      * @return \XMLWriter
@@ -74,6 +82,9 @@ class DatiGenerali implements XmlSerializableInterface
                 );
                 $this->writeXmlFields($writer);
             $writer->endElement();
+            if ($this->datiDdt) {
+                $this->datiDdt->toXmlBlock($writer);
+            }
         $writer->endElement();
         //todo: implementare DatiOrdineAcquisto, DatiContratto etc. (facoltativi)
         return $writer;

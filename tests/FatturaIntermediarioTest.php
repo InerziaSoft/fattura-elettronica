@@ -54,6 +54,19 @@ class FatturaIntermediarioTest extends TestCase
     }
 
     /**
+     * @return FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea
+     */
+    public function testCreateIscrizioneRea()
+    {
+        $iscrizioneRea = new FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea(
+            'UD',
+            '286546'
+        );
+        $this->assertInstanceOf(FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea::class, $iscrizioneRea);
+        return $iscrizioneRea;
+    }
+
+    /**
      * @depends testCreateAnagraficaCedente
      * @depends testCreateSedeCedente
      * @param DatiAnagrafici $datiAnagrafici
@@ -113,6 +126,23 @@ class FatturaIntermediarioTest extends TestCase
     }
 
     /**
+     * @depends testSetCessionarioCommittente
+     * @depends testCreateIscrizioneRea
+     * @param FatturaElettronicaFactory $factory
+     * @param FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea $iscrizioneRea
+     * @return FatturaElettronicaFactory
+     */
+    public function testSetIscrizioneRea(
+        FatturaElettronicaFactory $factory,
+        FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea $iscrizioneRea
+    )
+    {
+        $factory->setIscrizioneRea($iscrizioneRea);
+        $this->assertInstanceOf(FatturaElettronicaFactory::class, $factory);
+        return $factory;
+    }
+
+    /**
      * @return DatiGenerali
      */
     public function testCreateDatiGenerali()
@@ -149,6 +179,8 @@ class FatturaIntermediarioTest extends TestCase
         $linee = [];
         $linee[] = new Linea('Articolo1', 50, 'ABC');
         $linee[]= new Linea('Articolo2', 50, 'CDE');
+        $linee[0]->DataInizioPeriodo = '2018-10-01';
+        $linee[0]->DataFinePeriodo = '2018-10-31';
         $this->assertCount(2, $linee);
         return $linee;
     }
@@ -166,7 +198,7 @@ class FatturaIntermediarioTest extends TestCase
     }
 
     /**
-     * @depends testSetCessionarioCommittente
+     * @depends testSetIscrizioneRea
      * @depends testCreateDatiGenerali
      * @depends testCreateDatiPagamento
      * @depends testCreateDettaglioLinee

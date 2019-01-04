@@ -112,9 +112,22 @@ class FatturaSempliceTest extends TestCase
     }
 
     /**
+     * @return DatiGenerali\DatiDdt
+     */
+    public function testDatiDdt()
+    {
+        $datiDdt = new DatiGenerali\DatiDdt('A1', '2018-11-10', ['1', '2']);
+        $datiDdt->addDatiDdt(new DatiGenerali\DatiDdt('A2', '2018-12-09', ['3', '4']));
+        $this->assertInstanceOf(DatiGenerali\DatiDdt::class, $datiDdt);
+        return $datiDdt;
+    }
+
+    /**
+     * @depends testDatiDdt
+     * @param DatiGenerali\DatiDdt $datiDdt
      * @return DatiGenerali
      */
-    public function testCreateDatiGenerali()
+    public function testCreateDatiGenerali(DatiGenerali\DatiDdt $datiDdt)
     {
         $datiGenerali = new DatiGenerali(
             TipoDocumento::Fattura,
@@ -122,6 +135,7 @@ class FatturaSempliceTest extends TestCase
             '2018221111',
             122
         );
+        $datiGenerali->setDatiDdt($datiDdt);
         $this->assertInstanceOf(DatiGenerali::class, $datiGenerali);
         return $datiGenerali;
     }

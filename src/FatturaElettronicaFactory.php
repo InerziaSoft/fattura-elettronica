@@ -65,7 +65,7 @@ class FatturaElettronicaFactory
 		Sede $sedeCedente,
 		$telefonoCedente,
 		$emailCedente,
-		$riferAmministr126,
+		$riferAmministr126 = null,
 		DatiAnagrafici $terzoIntermediario = null,
 		$soggettoEmittente = 'TZ'
     ) {
@@ -85,12 +85,27 @@ class FatturaElettronicaFactory
 	 */
     public function setCedentePrestatore(DatiAnagrafici $datiAnagrafici, Sede $sede, $rifAmministr126 = null, $idTrasmittente = true)
     {
-        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede, $rifAmministr126);
+        $this->cedentePrestatore = new CedentePrestatore($datiAnagrafici, $sede);
+        if ($rifAmministr126) {
+        	$this->cedentePrestatore->setRiferimentoAmministrazione($rifAmministr126);
+		}
         if ($idTrasmittente) {
             $this->idTrasmittente = new IdTrasmittente($datiAnagrafici->idPaese, $datiAnagrafici->codiceFiscale);
         }
     }
 
+    /**
+     * @param CedentePrestatore\IscrizioneRea $iscrizioneRea
+     */
+    public function setIscrizioneRea(CedentePrestatore\IscrizioneRea $iscrizioneRea)
+    {
+        $this->cedentePrestatore->setIscrizioneRea($iscrizioneRea);
+    }
+
+    /**
+     * @param DatiAnagrafici $terzoIntermediario
+     * @param string $soggettoEmittente
+     */
     public function setIntermediario(DatiAnagrafici $terzoIntermediario, $soggettoEmittente = 'TZ')
     {
         $this->terzoIntermediario = $terzoIntermediario;
@@ -107,6 +122,13 @@ class FatturaElettronicaFactory
         $this->email = $email;
     }
 
+    /**
+     * @param DatiAnagrafici $datiAnagrafici
+     * @param Sede $sede
+     * @param string $codiceDestinatario
+     * @param string $pec
+     * @param bool $pa
+     */
     public function setCessionarioCommittente(
         DatiAnagrafici $datiAnagrafici,
         Sede $sede,
@@ -133,10 +155,10 @@ class FatturaElettronicaFactory
      * @return FatturaElettronica
      * @throws \Exception
      */
-    public function create(
+    public function create(	//TODO: ordine parametri
         DatiGenerali $datiGenerali,
-        $datiPagamento,
         DettaglioLinee $linee,
+		DatiPagamento $datiPagamento = null,
         $progessivoInvio = false,
         FatturaElettronicaBody\DatiBeniServizi\DatiRiepilogo $datiRiepilogo = null
     ) {

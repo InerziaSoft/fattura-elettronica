@@ -18,6 +18,7 @@ use Deved\FatturaElettronica\XmlSerializableInterface;
 
 class FatturaElettronicaBody implements XmlSerializableInterface
 {
+    const FE_CODE = 2.0;
     /** @var DatiGenerali  */
     public $datGenerali;
     /** @var DatiBeniServizi  */
@@ -50,7 +51,7 @@ class FatturaElettronicaBody implements XmlSerializableInterface
         $writer->startElement('FatturaElettronicaBody');
             $this->datGenerali->toXmlBlock($writer);
             $this->datiBeniServizi->toXmlBlock($writer);
-            if (isset($this->datiPagamento)) {
+            if ($this->datiPagamento) {
                 $this->datiPagamento->toXmlBlock($writer);
             }
         $writer->endElement();

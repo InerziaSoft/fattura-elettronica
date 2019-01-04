@@ -11,6 +11,7 @@
 
 namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader;
 
+use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader\CedentePrestatore\IscrizioneRea;
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader\Common\DatiAnagrafici;
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaHeader\Common\Sede;
 use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
@@ -24,21 +25,43 @@ class CedentePrestatore implements XmlSerializableInterface
     /** @var Sede */
     protected $sede;
 	/** @var string|null */
-    protected $riferimentoAmministrazione;
+    protected $rifAmministrazione126;
+    /** @var IscrizioneRea */
+    protected $iscrizioneRea;
 
-    /**
-     * CedentePrestatore constructor.
-     * @param DatiAnagrafici $datiAnagrafici
-     * @param Sede $sede
-     */
+
+	/**
+	 * CedentePrestatore constructor.
+	 * @param DatiAnagrafici $datiAnagrafici
+	 * @param Sede $sede
+	 * @param null $rifAmministr126
+	 * @param IscrizioneRea $iscrizioneRea
+	 */
     public function __construct(
         DatiAnagrafici $datiAnagrafici,
         Sede $sede,
-        $riferimentoAmministrazione
+		$rifAmministr126 = null,
+        IscrizioneRea $iscrizioneRea = null
     ) {
         $this->datiAnagrafici = $datiAnagrafici;
         $this->sede = $sede;
-        $this->riferimentoAmministrazione = $riferimentoAmministrazione;
+        $this->rifAmministrazione126 = $rifAmministr126;
+        $this->iscrizioneRea = $iscrizioneRea;
+    }
+
+	/**
+	 * @param string $rifAdmin
+	 */
+    public function setRiferimentoAmministrazione ($rifAdmin) {
+    	$this->rifAmministrazione126 = $rifAdmin;
+	}
+
+    /**
+     * @param IscrizioneRea $iscrizioneRea
+     */
+    public function setIscrizioneRea(IscrizioneRea $iscrizioneRea)
+    {
+        $this->iscrizioneRea = $iscrizioneRea;
     }
 
     /**
@@ -48,12 +71,15 @@ class CedentePrestatore implements XmlSerializableInterface
     public function toXmlBlock(\XMLWriter $writer)
     {
         $writer->startElement('CedentePrestatore');
-        $this->datiAnagrafici->toXmlBlock($writer);
-        $this->sede->toXmlBlock($writer);
-
-        if (isset($this->riferimentoAmministrazione)) $writer->writeElement("RiferimentoAmministrazione", $this->riferimentoAmministrazione);
-
-        $this->writeXmlFields($writer);
+        	$this->datiAnagrafici->toXmlBlock($writer);
+        	$this->sede->toXmlBlock($writer);
+            if ($this->iscrizioneRea) {
+                $this->iscrizioneRea->toXmlBlock($writer);
+            }
+			if ($this->rifAmministrazione126) {
+				$writer->writeElement("RiferimentoAmministrazione", $this->rifAmministrazione126);
+			}
+            $this->writeXmlFields($writer);
         $writer->endElement();
         return $writer;
     }
