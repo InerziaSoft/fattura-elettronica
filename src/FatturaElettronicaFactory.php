@@ -94,6 +94,13 @@ class FatturaElettronicaFactory
         }
     }
 
+	/**
+	 * @param $trasmittente IdTrasmittente
+	 */
+    public function setIdTrasmittente($trasmittente) {
+    	$this->idTrasmittente = $trasmittente;
+	}
+
     /**
      * @param CedentePrestatore\IscrizioneRea $iscrizioneRea
      */
@@ -155,7 +162,7 @@ class FatturaElettronicaFactory
      * @return FatturaElettronica
      * @throws \Exception
      */
-    public function create(	//TODO: ordine parametri
+    public function create(
         DatiGenerali $datiGenerali,
         DettaglioLinee $linee,
 		DatiPagamento $datiPagamento = null,

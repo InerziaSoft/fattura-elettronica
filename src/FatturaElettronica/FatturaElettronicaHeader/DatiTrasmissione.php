@@ -59,11 +59,11 @@ class DatiTrasmissione implements XmlSerializableInterface
         $this->progressivoInvio = $progressivoInvio;
         $this->codiceDestinatario = $codiceDestinatario;
         $this->formatoTrasmissione = $pa ? self::FORMATO_PA : self::FORMATO_PRIVATO;
-        if ($telefono) {
-            $this->contattiTrasmittente['telefono'] = $telefono;
+        if ($idTrasmittente->telefono) {
+            $this->contattiTrasmittente['telefono'] = $idTrasmittente->telefono;
         }
-        if ($email) {
-            $this->contattiTrasmittente['email'] = $email;
+        if ($idTrasmittente->email) {
+            $this->contattiTrasmittente['email'] = $idTrasmittente->email;
         }
         $this->pecDestinatario = $pecDestinatario;
     }

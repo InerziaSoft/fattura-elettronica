@@ -19,16 +19,22 @@ class IdTrasmittente implements XmlSerializableInterface
     public $idPaese;
     /** @var string */
     public $idCodice;
+    /** @var string */
+    public $telefono;
+    /** @var string */
+    public $email;
 
     /**
      * IdTrasmittente constructor.
      * @param string $idPaese
      * @param integer $idCodice
      */
-    public function __construct($idPaese, $idCodice)
+    public function __construct($idPaese, $idCodice, $telefono=null, $email=null)
     {
         $this->idPaese = $idPaese;
         $this->idCodice = $idCodice;
+        $this->telefono = $telefono;
+        $this->email = $email;
     }
 
     /**
