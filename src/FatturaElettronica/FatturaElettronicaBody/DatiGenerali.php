@@ -75,7 +75,9 @@ class DatiGenerali implements XmlSerializableInterface
                 $writer->writeElement('Divisa', $this->divisa);
                 $writer->writeElement('Data', $this->data);
                 $writer->writeElement('Numero', $this->numero);
-                $this->datiBollo->toXmlBlock($writer);
+                if ($this->datiBollo) {
+					$this->datiBollo->toXmlBlock($writer);
+				}
                 $writer->writeElement(
                     'ImportoTotaleDocumento',
                     fe_number_format($this->importoTotaleDocumento, 2)
