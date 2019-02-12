@@ -39,7 +39,7 @@ class DatiDdt implements XmlSerializableInterface, \Countable, \Iterator
         $this->numeroDdt = $numeroDdt;
         $this->dataDdt = $dataDdt;
         $this->riferimentoNumeroLinee = $riferimentoNumeroLinee;
-        $this->datiDdt = [];
+        $this->datiDdt = $this;
     }
 
 

@@ -12,6 +12,7 @@
 namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody;
 
 use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\DatiGenerali\DatiDdt;
+use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\DatiGenerali\DatiOrdineAcquisto;
 use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
 
@@ -32,6 +33,8 @@ class DatiGenerali implements XmlSerializableInterface
     protected $datiBollo;
 	/** @var DatiDdt */
 	protected $datiDdt;
+	/** @var DatiOrdineAcquisto */
+	protected $datiOrdineAcquisto;
 
 	/**
 	 * DatiGenerali constructor.
@@ -42,26 +45,26 @@ class DatiGenerali implements XmlSerializableInterface
 	 * @param string $divisa
 	 * @param DatiBollo $datiBollo
 	 */
-    public function __construct(
-        $tipoDocumento,
-        $data,
-        $numero,
-        $importoTotaleDocumento,
-        $divisa = 'EUR',
-		$datiBollo = null
-    ) {
+    public function __construct($tipoDocumento, $data, $numero, $importoTotaleDocumento, $divisa = 'EUR', $datiBollo = null, $datiOrdineAcquisto = null)
+	{
         $this->tipoDocumento = $tipoDocumento;
         $this->data = $data;
         $this->numero = $numero;
         $this->importoTotaleDocumento = $importoTotaleDocumento;
         $this->divisa = $divisa;
         $this->datiBollo = $datiBollo;
+        $this->datiOrdineAcquisto = $datiOrdineAcquisto;
     }
 
     public function setDatiDdt(DatiDdt $datiDdt)
     {
         $this->datiDdt = $datiDdt;
     }
+
+    public function setDatiAcquisto(DatiOrdineAcquisto $datiOrdineAcquisto)
+	{
+		$this->datiOrdineAcquisto = $datiOrdineAcquisto;
+	}
 
     /**
      * @param \XMLWriter $writer
@@ -78,17 +81,17 @@ class DatiGenerali implements XmlSerializableInterface
                 if ($this->datiBollo) {
 					$this->datiBollo->toXmlBlock($writer);
 				}
-                $writer->writeElement(
-                    'ImportoTotaleDocumento',
-                    fe_number_format($this->importoTotaleDocumento, 2)
-                );
+                $writer->writeElement('ImportoTotaleDocumento', fe_number_format($this->importoTotaleDocumento, 2));
                 $this->writeXmlFields($writer);
             $writer->endElement();
+            if ($this->datiOrdineAcquisto) {
+            	$this->datiOrdineAcquisto->toXmlBlock($writer);
+			}
             if ($this->datiDdt) {
                 $this->datiDdt->toXmlBlock($writer);
             }
         $writer->endElement();
-        //todo: implementare DatiOrdineAcquisto, DatiContratto etc. (facoltativi)
+        //todo: implementare DatiContratto etc. (facoltativi)
         return $writer;
     }
 }
