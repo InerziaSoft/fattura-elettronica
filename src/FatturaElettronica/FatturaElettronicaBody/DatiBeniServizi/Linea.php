@@ -13,6 +13,7 @@ namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\Dat
 
 use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
+use Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\DatiBeniServizi\AltriDatiGestionali;
 
 class Linea implements XmlSerializableInterface
 {
@@ -33,6 +34,8 @@ class Linea implements XmlSerializableInterface
     protected $aliquotaIva;
     /** @var string */
     protected $natura;
+	/** @var AltriDatiGestionali */
+    protected $altriDatiGestionali;
 
 
 	/**
@@ -52,7 +55,8 @@ class Linea implements XmlSerializableInterface
         $quantita = null,
         $unitaMisura = 'pz',
         $aliquotaIva = 22.00,
-		$natura = null
+		$natura = null,
+		$altriDatiGestionali = null
     ) {
         $this->codiceArticolo = $codiceArticolo;
         $this->descrizione = $descrizione;
@@ -61,6 +65,7 @@ class Linea implements XmlSerializableInterface
         $this->unitaMisura = $unitaMisura;
         $this->aliquotaIva = $aliquotaIva;
         $this->natura = $natura;
+        $this->altriDatiGestionali = $altriDatiGestionali;
     }
 
 
@@ -90,6 +95,9 @@ class Linea implements XmlSerializableInterface
         $writer->writeElement('PrezzoTotale', $this->prezzoTotale());
         $writer->writeElement('AliquotaIVA', fe_number_format($this->aliquotaIva, 2));
         $writer->writeElement('Natura', $this->natura);
+        if ($this->altriDatiGestionali) {
+        	$this->altriDatiGestionali->toXmlBlock($writer);
+		}
         $this->writeXmlFields($writer);
         $writer->endElement();
         return $writer;

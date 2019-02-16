@@ -45,7 +45,7 @@ class DatiOrdineAcquisto implements XmlSerializableInterface, \Countable, \Itera
 	 * @param $codiceCUP string
 	 * @param $codiceCIG string
 	 */
-	public function __construct($riferimentoLinea, $idDocumento, $data, $numItem, $codiceCommessa, $codiceCUP, $codiceCIG)
+	public function __construct($riferimentoLinea, $idDocumento, $data=null, $numItem=null, $codiceCommessa=null, $codiceCUP=null, $codiceCIG=null)
 	{
 		$this->riferimentoNumeroLinea = $riferimentoLinea;
 		$this->IdDocumento = $idDocumento;

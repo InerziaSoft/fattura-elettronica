@@ -28,6 +28,8 @@ class DatiGenerali implements XmlSerializableInterface
     /** @var float */
     protected $importoTotaleDocumento;
     /** @var string */
+    protected $causale;
+    /** @var string */
     protected $divisa;
     /** @var DatiBollo */
     protected $datiBollo;
@@ -44,8 +46,10 @@ class DatiGenerali implements XmlSerializableInterface
 	 * @param float $importoTotaleDocumento
 	 * @param string $divisa
 	 * @param DatiBollo $datiBollo
+	 * @param DatiOrdineAcquisto $datiOrdineAcquisto
+	 * @param array $causale
 	 */
-    public function __construct($tipoDocumento, $data, $numero, $importoTotaleDocumento, $divisa = 'EUR', $datiBollo = null, $datiOrdineAcquisto = null)
+    public function __construct($tipoDocumento, $data, $numero, $importoTotaleDocumento, $divisa = 'EUR', $datiBollo = null, $datiOrdineAcquisto = null, $causale = null)
 	{
         $this->tipoDocumento = $tipoDocumento;
         $this->data = $data;
@@ -54,6 +58,7 @@ class DatiGenerali implements XmlSerializableInterface
         $this->divisa = $divisa;
         $this->datiBollo = $datiBollo;
         $this->datiOrdineAcquisto = $datiOrdineAcquisto;
+        $this->causale = $causale;
     }
 
     public function setDatiDdt(DatiDdt $datiDdt)
@@ -90,6 +95,11 @@ class DatiGenerali implements XmlSerializableInterface
             if ($this->datiDdt) {
                 $this->datiDdt->toXmlBlock($writer);
             }
+            if ($this->casuale && count($this->casuale) > 0) {
+				foreach ($this->causale as $line) {
+					$writer->writeElement("Causale", $line);
+				}
+			}
         $writer->endElement();
         //todo: implementare DatiContratto etc. (facoltativi)
         return $writer;
