@@ -48,18 +48,27 @@ class DatiAnagrafici implements XmlSerializableInterface
      */
     public function toXmlBlock(\XMLWriter $writer)
     {
+    	$vatCodeExists = ($this->idCodice && $this->idPaese);
+    	$fiscalCodeExists = ($this->codiceFiscale);
         $writer->startElement('DatiAnagrafici');
-        if ($this->idCodice && $this->idPaese) {
+        if ($vatCodeExists) {
             $writer->startElement('IdFiscaleIVA');
                 $writer->writeElement('IdPaese', $this->idPaese);
                 $writer->writeElement('IdCodice', $this->idCodice);
             $writer->endElement();
         }
-        	if ($this->codiceFiscale) {
+        else if ($fiscalCodeExists) {
 				$writer->writeElement('CodiceFiscale', $this->codiceFiscale);
 			}
             $writer->startElement('Anagrafica');
-                $writer->writeElement('Denominazione', $this->denominazione);
+        		if ($vatCodeExists) {
+					$writer->writeElement('Denominazione', $this->denominazione);
+				}
+        		else if ($fiscalCodeExists) {
+        			$nomi = explode(" ", $this->denominazione, 2);
+        			$writer->writeElement('Nome', $nomi[0]);
+        			$writer->writeElement('Cognome', $nomi[1]);
+				}
             $writer->endElement();
         if ($this->regimeFiscale) {
             $writer->writeElement('RegimeFiscale', $this->regimeFiscale);
