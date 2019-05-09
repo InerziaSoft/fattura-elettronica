@@ -53,23 +53,29 @@ class DatiAnagrafici implements XmlSerializableInterface
         $writer->startElement('DatiAnagrafici');
         if ($vatCodeExists) {
             $writer->startElement('IdFiscaleIVA');
-                $writer->writeElement('IdPaese', $this->idPaese);
-                $writer->writeElement('IdCodice', $this->idCodice);
+            $writer->writeElement('IdPaese', $this->idPaese);
+            $writer->writeElement('IdCodice', $this->idCodice);
             $writer->endElement();
         }
         else if ($fiscalCodeExists) {
 				$writer->writeElement('CodiceFiscale', $this->codiceFiscale);
-			}
-            $writer->startElement('Anagrafica');
-        		if ($vatCodeExists) {
-					$writer->writeElement('Denominazione', $this->denominazione);
-				}
-        		else if ($fiscalCodeExists) {
-        			$nomi = explode(" ", $this->denominazione, 2);
-        			$writer->writeElement('Nome', $nomi[0]);
-        			$writer->writeElement('Cognome', $nomi[1]);
-				}
-            $writer->endElement();
+		}
+        else {
+			$writer->startElement('IdFiscaleIVA');
+			$writer->writeElement('IdPaese', $this->idPaese);
+			$writer->writeElement('IdCodice', $this->idCodice);
+			$writer->endElement();
+		}
+		$writer->startElement('Anagrafica');
+		if ($fiscalCodeExists) {
+			$nomi = explode(" ", $this->denominazione, 2);
+			$writer->writeElement('Nome', $nomi[0]);
+			$writer->writeElement('Cognome', $nomi[1]);
+		}
+		else {
+			$writer->writeElement('Denominazione', $this->denominazione);
+		}
+		$writer->endElement();
         if ($this->regimeFiscale) {
             $writer->writeElement('RegimeFiscale', $this->regimeFiscale);
         }
