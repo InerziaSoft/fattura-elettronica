@@ -19,11 +19,11 @@ abstract class Natura
     use CodificaTrait;
 
     const EscluseArt15 = 'N1';
-    const NonSoggette = 'N2';
-    const NonImponibili = 'N3';
+    const NonSoggette = 'N2.1';     //non soggette artt. 7
+    const NonImponibili = 'N3.4';   //non imponibili cessione all'esportazione
     const Esenti = 'N4';
     const RegimeDelMargine = 'N5';
-    const InversioneContabile = 'N6';
+    const InversioneContabile = 'N6.9'; //altri
     const IvaAssoltaUe = 'N7';
 
     protected static $codifiche = array(
