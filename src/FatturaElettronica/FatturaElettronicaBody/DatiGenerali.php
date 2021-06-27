@@ -87,6 +87,11 @@ class DatiGenerali implements XmlSerializableInterface
 					$this->datiBollo->toXmlBlock($writer);
 				}
                 $writer->writeElement('ImportoTotaleDocumento', fe_number_format($this->importoTotaleDocumento, 2));
+            	if ($this->causale && count($this->causale) > 0) {
+			foreach ($this->causale as $line) {
+				$writer->writeElement("Causale", $line);
+			}
+		}
                 $this->writeXmlFields($writer);
             $writer->endElement();
             if ($this->datiOrdineAcquisto) {
@@ -95,11 +100,6 @@ class DatiGenerali implements XmlSerializableInterface
             if ($this->datiDdt) {
                 $this->datiDdt->toXmlBlock($writer);
             }
-            if ($this->casuale && count($this->casuale) > 0) {
-				foreach ($this->causale as $line) {
-					$writer->writeElement("Causale", $line);
-				}
-			}
         $writer->endElement();
         //todo: implementare DatiContratto etc. (facoltativi)
         return $writer;
