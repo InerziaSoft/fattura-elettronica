@@ -94,7 +94,10 @@ class Linea implements XmlSerializableInterface
         $writer->writeElement('PrezzoUnitario', fe_number_format($this->prezzoUnitario, 2));
         $writer->writeElement('PrezzoTotale', $this->prezzoTotale());
         $writer->writeElement('AliquotaIVA', fe_number_format($this->aliquotaIva, 2));
-        $writer->writeElement('Natura', $this->natura);
+		if ($this->natura) {
+			$writer->writeElement('Natura', $this->natura);
+		}
+
         if ($this->altriDatiGestionali) {
         	$this->altriDatiGestionali->toXmlBlock($writer);
 		}
