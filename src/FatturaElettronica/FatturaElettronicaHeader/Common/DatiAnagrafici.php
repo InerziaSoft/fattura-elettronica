@@ -27,19 +27,23 @@ class DatiAnagrafici implements XmlSerializableInterface
     public $idCodice;
     /** @var string */
     public $regimeFiscale;
+    /** @var string  */
+    public $titolo;
 
     public function __construct(
         $codiceFiscale,
         $denominazione,
         $idPaese = '',
         $idCodice = '',
-        $regimeFiscale = ''
+        $regimeFiscale = '',
+        $titolo = ''
     ) {
         $this->codiceFiscale = $codiceFiscale;
         $this->denominazione = $denominazione;
         $this->idPaese = $idPaese;
         $this->idCodice = $idCodice;
         $this->regimeFiscale = $regimeFiscale;
+        $this->titolo = $titolo;
     }
 
     /**
@@ -53,24 +57,22 @@ class DatiAnagrafici implements XmlSerializableInterface
         $writer->startElement('DatiAnagrafici');
         if ($vatCodeExists) {
             $writer->startElement('IdFiscaleIVA');
-            $writer->writeElement('IdPaese', $this->idPaese);
-            $writer->writeElement('IdCodice', $this->idCodice);
+                $writer->writeElement('IdPaese', $this->idPaese);
+                $writer->writeElement('IdCodice', $this->idCodice);
             $writer->endElement();
         }
-        else if ($fiscalCodeExists) {
-				$writer->writeElement('CodiceFiscale', $this->codiceFiscale);
+        if ($fiscalCodeExists) {
+			$writer->writeElement('CodiceFiscale', $this->codiceFiscale);
 		}
-        else {
-			$writer->startElement('IdFiscaleIVA');
-			$writer->writeElement('IdPaese', $this->idPaese);
-			$writer->writeElement('IdCodice', $this->idCodice);
-			$writer->endElement();
-		}
+
 		$writer->startElement('Anagrafica');
-		if ($fiscalCodeExists) {
+		if (!$vatCodeExists) {
 			$nomi = explode(" ", $this->denominazione, 2);
 			$writer->writeElement('Nome', $nomi[0]);
 			$writer->writeElement('Cognome', $nomi[1]);
+            if ($this->titolo) {
+                $writer->writeElement('Titolo', $this->titolo);
+            }
 		}
 		else {
 			$writer->writeElement('Denominazione', $this->denominazione);
