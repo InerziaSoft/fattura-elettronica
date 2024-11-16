@@ -11,6 +11,7 @@
 
 namespace Deved\FatturaElettronica\FatturaElettronica\FatturaElettronicaBody\DatiBeniServizi;
 
+use Deved\FatturaElettronica\Codifiche\Natura;
 use Deved\FatturaElettronica\Traits\MagicFieldsTrait;
 use Deved\FatturaElettronica\XmlSerializableInterface;
 
@@ -76,6 +77,13 @@ class DatiRiepilogo implements XmlSerializableInterface, \Countable, \Iterator
             if (!$natura) {
                 $writer->writeElement('EsigibilitaIVA', $block->esigibilitaIVA);
             }
+            if ($natura){
+                $descr = Natura::descrizione(mb_strimwidth($block->natura, 0, 100));
+                if ($descr){
+                    $writer->writeElement('RiferimentoNormativo', $descr);
+                } 
+                
+            } 
             $block->writeXmlFields($writer);
             $writer->endElement();
         }
